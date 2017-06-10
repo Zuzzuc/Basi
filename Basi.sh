@@ -89,9 +89,10 @@ if [ "$1" != "" ];then
    				if [ "$config" == "$0" ];then
    					exitw "3" "Config file points to this script."
    				else
-   					if [ firstlineISTHERIGHTONE ];then
-   						# Then go
-   						:
+   					if [ "$(read -r tmpc < "$config";echo $tmpc)" == '#Basi Config File' ];then
+   						config=""
+   					else
+   						exitw "3" "Config file missing first line mark"
    					fi
    				fi
    			else
