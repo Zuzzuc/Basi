@@ -11,13 +11,11 @@
 # 5: BasiPath or BasiLoc is missing or empty. 
 # 6: BasiPath and BasiLoc isnt same length.
 # 7: More FileActions than files.
-# 8: Default config file not found.(in case of no specified condfig)
+# 8: Attempted to read default config, but didn't find the file.
 #
 
 
 ## TODO
-#
-#
 #
 # Maybe add some sort of log, so we does not need to show all curl output, and instead show a cleaner window.
 #
@@ -170,9 +168,12 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 		fi
 		
 		if [ "${BasiFileAction[i]}" != "" ];then
+			# Vars that gets created here: BasiActiveFile, BasiDir, what else?
 			echo "Performing operations on file ${BasiLoc[i]%/*}"
 			# Note this var. It can be useful for FileAction
 			BasiActiveFile="${BasiPath[i]/*%/}" 
+			# $0 is already formatted('\','[:space:]$') so we just need to cut out the filename.
+			BasiDir="${0%/*}"
 			eval "${BasiFileAction[i]}"
 		fi
 	else
