@@ -16,7 +16,6 @@
 
 ## TODO
 #
-# Add input handler. 
 #
 # Add option too show progress when downloading.
 #
@@ -57,24 +56,28 @@ ExitStatus="0"
 # Default vars
 
 config=""
+show_dlbar="true" # No option yet
+net_prog="true" # No option yet
 
 
-if [ "$1" != "" ];then
+
+if [ "$@" != "" ];then
 	# Set input vars.
 	
 	for i in "$@";do					
 		case "$i" in
 			# Check args and set vars
 		
-			"$0")
+		"$0")
 			# Should we use continue or ':'?
 			:
     		# continue
     		;;
-    		-c=*|--config=*)
+    	-c=*|--config=*)
     		# Below we do the equivalent of 'config=echo "${i#*=}" | xargs'.
     		# The reason we does it with parameter expansion is that it's roughly 100 times faster than calling xargs. 
-   			c="${i#*=}" && c="${c/\\/}" && c="${c/* $/}"
+   			#c="${i#*=}" && c="${c/\\/}" && c="${c/* $/}"
+   			c="${i#*=}" && c="${c/\\/}" && c="${c%"${c##*[![:space:]]}"}"
    			# We need to do this because sadly parameter extension does not support nesting. (eg, ${string:#string-4}) wont work. 
    			cl="${#c}"
    			if [ "${c:cl-4}" == ".cfg" ];then
@@ -91,6 +94,10 @@ if [ "$1" != "" ];then
    			else
    				exitw "3" "Config file does not end with cfg."
    			fi
+   			;;
+   		-=nodlb*|--no_download_bar=*)
+   				net_prog="false"
+   			;;
 		esac
 	done
 fi
@@ -125,7 +132,7 @@ fi
 # Auth vars
 if [ "${#BasiPath[@]}" != "0" ] && [ "${#BasiLoc[@]}" != "0" ];then		
 	if [ "${#BasiPath[@]}" == "${#BasiLoc[@]}" ];then
-		if [ ${#BasiLoc[@]} -lt ${#BasiFileAction[@]} ];then
+		if [ "${#BasiLoc[@]}" -lt "${#BasiFileAction[@]}" ];then
 			exitw "7" "Too many FileActions"
 		fi	
 	else
@@ -145,7 +152,11 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 		elif [ "${BasiPath[i]/\%*/}" == "remote" ];then
 			echo "Transferring remote file ${BasiLoc[i]%/*}"
 			mkdir -p "${BasiLoc[i]%/*}"
-			curl -s -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+			if [ "$show_dlbar" == "true" ];then
+				curl -s -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+			else
+				curl -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+			fi
 		else
 			exitw "2" "Unknown location to retrive file from. Encountered format was '${BasiPath[i]/\%*/}'"
 		fi
