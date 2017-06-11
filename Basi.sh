@@ -78,7 +78,7 @@ if [ "$@" != "" ];then
     		# Below we do the equivalent of 'config=echo "${i#*=}" | xargs'.
     		# The reason we does it with parameter expansion is that it's roughly 100 times faster than calling xargs. 
    			#c="${i#*=}" && c="${c/\\/}" && c="${c/* $/}"
-   			c="${i#*=}" && c="${c/\\/}" && c="${c%"${c##*[![:space:]]}"}"
+   			c="${i#*=}" && c="${c/\\/}" && c="${c%${c##*[![:space:]]}}"
    			# We need to do this because sadly parameter extension does not support nesting. (eg, ${string:#string-4}) wont work. 
    			# JUST REALISED, ${string:${#string}-4} works!
    			if [ "${c:${#c}-4}" == ".cfg" ];then
