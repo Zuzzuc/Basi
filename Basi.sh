@@ -7,10 +7,11 @@
 #
 # 2: Unknown location to retrieve file from. It must be either local or remote.
 # 3: Not valid config file
+# 4: Config file not found.
 # 5: BasiPath or BasiLoc is missing or empty. 
 # 6: BasiPath and BasiLoc isnt same length.
 # 7: More FileActions than files.
-# 8: Default config file not found.
+# 8: Default config file not found.(in case of no specified condfig)
 #
 
 
@@ -79,9 +80,9 @@ if [ "$@" != "" ];then
    			#c="${i#*=}" && c="${c/\\/}" && c="${c/* $/}"
    			c="${i#*=}" && c="${c/\\/}" && c="${c%"${c##*[![:space:]]}"}"
    			# We need to do this because sadly parameter extension does not support nesting. (eg, ${string:#string-4}) wont work. 
-   			cl="${#c}"
-   			if [ "${c:cl-4}" == ".cfg" ];then
-   				if [ "$c" == "$0" ];then
+   			# JUST REALISED, ${string:${#string}-4} works!
+   			if [ "${c:${#c}-4}" == ".cfg" ];then
+   				if [ "$c" == "${0/\\/}" ];then
    					exitw "3" "Config file points to this script."
    				else
    					# Using read instead of 'head -1' because it's a bash builtin.
@@ -116,20 +117,23 @@ else
 fi
 
 
-
-if [  ];then
-
-	#if [ -f "${0%/*}/Basi.cfg" ];then
-	#		echo "Will source default config file."
-	#		source "${0%/*}/Basi.cfg"
-	#	else
-	#		exitw "8" "No config file found."
-	#	fi
-	#fi
-
+if [ "$config" != "" ];then
+	if [ -f "$config" ];then
+			echo "Read config from $config"
+			source "$config"
+		else
+			exitw "4" "Config file not found."
+		fi
+	fi
+elif [ "$caller" == "Standalone" ];then
+	if [ -f "${0%/*}/Basi.cfg" ];then
+			echo "Will source default config file."
+			source "${0%/*}/Basi.cfg"
+		else
+			exitw "8" "No config file found."
+		fi
+	fi
 fi
-
-
 
 
 # Auth vars
