@@ -135,7 +135,6 @@ elif [ "$caller" == "Standalone" ];then
 	fi
 fi
 
-
 # Auth vars
 if [ "${#BasiPath[@]}" != "0" ] && [ "${#BasiLoc[@]}" != "0" ];then		
 	if [ "${#BasiPath[@]}" == "${#BasiLoc[@]}" ];then
