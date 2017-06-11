@@ -18,12 +18,6 @@
 ## TODO
 #
 #
-# Add option too show progress when downloading.
-#
-# Add option to specify path to Config File. (Should it be required to end with .cfg? i think yes, but not thought much)
-# Gör om så att filen är .cfg istället(dvs def=Basi.cfg)
-#
-# Choose default show/hide progress bar download
 #
 # Maybe add some sort of log, so we does not need to show all curl output, and instead show a cleaner window.
 #
