@@ -127,23 +127,39 @@ fi
 for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 	if [ "BasiPath[i]" != "" ];then
 		if [ "${BasiPath[i]/\%*/}" == "local" ];then
-			echo -e "Transferring ${lightblue}local${nocolor} file ${BasiLoc[i]}"
+			if [ "$color" == "true" ];then
+				echo -e "Transferring ${lightblue}local${nocolor} file ${BasiLoc[i]}"
+			else
+				echo "Transferring local file ${BasiLoc[i]}"
+			fi
 			mkdir -p "${BasiLoc[i]%/*}"
 			cp -Rf "${BasiPath[i]/*%/}" "${BasiLoc[i]}" 
 		elif [ "${BasiPath[i]/\%*/}" == "remote" ];then
-			echo -e "Transferring ${lightblue}remote${nocolor} file ${BasiLoc[i]}"
+			if [ "$color" == "true" ];then
+				echo -e "Transferring ${lightblue}remote${nocolor} file ${BasiLoc[i]}"
+			else
+				echo "Transferring remote file ${BasiLoc[i]}"
+			fi
 			mkdir -p "${BasiLoc[i]%/*}"
 			if [ "$cont" == "true" ];then
 				if [ "$dlbar" == "true" ];then
-					curl -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
-					echo -en "\n"
+					if [ "$sdlb" == "true" ];then
+						curl -# -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+					else
+						curl -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+					fi
+					echo -ne "\n"
 				else
 					curl -s -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
 				fi
 			else
 				if [ "$dlbar" == "true" ];then
-					curl -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
-					echo -en "\n"
+					if [ "$sdlb" == "true" ];then
+						curl -# -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
+					else
+						curl -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
+					fi
+					echo -ne "\n"
 				else
 					curl -s -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
 				fi
