@@ -56,8 +56,8 @@ ExitStatus="0"
 # Default vars
 
 config=""
-no_dlbar="false" # No option yet
-net_cont="true"
+dlbar="true"
+cont="true"
 
 
 
@@ -96,10 +96,10 @@ if [ "$@" != "" ];then
    			fi
    			;;
    		-=nodlb|--no_download_bar)
-   				no_dlbar="true"
+   				dlbar="false"
    			;;
-   		-=netcont|--no_network_continue)
-   				net_cont="false"
+   		-=no_cont|--no_continue)
+   				cont="false"
    			;;
 		esac
 	done
@@ -155,10 +155,18 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 		elif [ "${BasiPath[i]/\%*/}" == "remote" ];then
 			echo "Transferring remote file ${BasiLoc[i]%/*}"
 			mkdir -p "${BasiLoc[i]%/*}"
-			if [ "$no_dlbar" == "false" ];then
-				curl -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+			if [ "$cont" == "true" ];then
+				if [ "$dlbar" == "true" ];then
+					curl -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+				else
+					curl -s -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+				fi
 			else
-				curl -s -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+				if [ "$dlbar" == "true" ];then
+					curl -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
+				else
+					curl -s -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
+				fi
 			fi
 		else
 			exitw "2" "Unknown location to retrive file from. Encountered format was '${BasiPath[i]/\%*/}'"
