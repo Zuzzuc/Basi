@@ -56,8 +56,8 @@ ExitStatus="0"
 # Default vars
 
 config=""
-show_dlbar="true" # No option yet
-net_prog="true" # No option yet
+no_dlbar="false" # No option yet
+net_cont="true"
 
 
 
@@ -95,8 +95,11 @@ if [ "$@" != "" ];then
    				exitw "3" "Config file does not end with cfg."
    			fi
    			;;
-   		-=nodlb*|--no_download_bar=*)
-   				net_prog="false"
+   		-=nodlb|--no_download_bar)
+   				no_dlbar="true"
+   			;;
+   		-=netcont|--no_network_continue)
+   				net_cont="false"
    			;;
 		esac
 	done
@@ -152,10 +155,10 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 		elif [ "${BasiPath[i]/\%*/}" == "remote" ];then
 			echo "Transferring remote file ${BasiLoc[i]%/*}"
 			mkdir -p "${BasiLoc[i]%/*}"
-			if [ "$show_dlbar" == "true" ];then
-				curl -s -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
-			else
+			if [ "$no_dlbar" == "false" ];then
 				curl -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+			else
+				curl -s -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
 			fi
 		else
 			exitw "2" "Unknown location to retrive file from. Encountered format was '${BasiPath[i]/\%*/}'"
