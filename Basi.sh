@@ -5,6 +5,7 @@
 
 ### Error codes
 #
+# 1: Generic error(By subprocess)
 # 2: Unknown location to retrieve file from. It must be either local or remote.
 # 3: Not valid config file
 # 4: Config file not found.
@@ -12,7 +13,7 @@
 # 6: BasiPath and BasiLoc isnt same length.
 # 7: More FileActions than files.
 # 8: Attempted to read default config, but didn't find the file.
-#
+# 9: Unknown argument
 
 
 ## TODO
@@ -23,17 +24,21 @@
 
 
 exitw(){
-	# Exits and prints message.
+	# Exits and echos message.
 	# Input is $1 and $2, where $1 is the exit code (0-256) and $2 is the message to display.
 	echo "$2"
 	exit $1
 }
 
 ExitStatus="0"
+lightblue='\033[1;34m'
+nocolor='\033[0m'
 
 config=""
 dlbar="true"
 cont="true"
+sdlb="false" # NOT IMPLEMENTED
+color="true"
 
 
 # Handle input
@@ -44,13 +49,12 @@ if [ "$*" != "" ];then
     		continue
     		;;
     	-c=*|--config=*)
-   			#c="${i#*=}" && c="${c/\\/}" && c="${c/* $/}"
    			c="${i#*=}" && c="${c/\\/}" && c="${c%${c##*[![:space:]]}}"
    			if [ "${c:${#c}-4}" == ".cfg" ];then
    				if [ "$c" == "${0/\\/}" ];then
    					exitw "3" "Config file points to this script."
    				else
-   					if [ "$(read -r tmpc < "$config";echo $tmpc)" == '#Basi Config File' ];then
+   					if [ "$(read -r tmpc < "$config";echo "$tmpc")" == '#Basi Config File' ];then
    						config="$c"
    					else
    						exitw "3" "Config file missing first line mark"
@@ -60,16 +64,26 @@ if [ "$*" != "" ];then
    				exitw "3" "Config file does not end with cfg."
    			fi
    			;;
-   		-no_dlb|--no_download_bar)
+   		-nodlb|--no_download_bar)
    				dlbar="false"
    			;;
-   		-no_cont|--no_continue)
-   				cont="false"
+   		-sdlb|--small_download_bar)
+   				dlbar="false"
+   			;;
+   		-nocont|--no_continue)
+   			cont="false"
+   			;;
+   		-nocol|--no_color)
+   			color="false"
+   			;;
+   		*)
+   			exitw "9" "Unknown argument '$i'"
    			;;
 		esac
 	done
 fi
 
+echo -en "\n\n" 
 
 if [ "$(caller 0)" != "" ];then
 	LaunchMode="Inline"
@@ -81,14 +95,14 @@ fi
 # Read config
 if [ "$config" != "" ];then
 	if [ -f "$config" ];then
-		echo "Read config from $config"
+		echo -e "\nReading config from $config\n"
 		source "$config"
 	else
 		exitw "4" "Config file not found."
 	fi
 elif [ "$LaunchMode" == "Standalone" ];then
 	if [ -f "${0%/*}/Basi.cfg" ];then
-		echo "Will source default config file."
+		echo -e "\nReading config from default file\n"
 		source "${0%/*}/Basi.cfg"
 	else
 		exitw "8" "No config file found."
@@ -113,21 +127,23 @@ fi
 for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 	if [ "BasiPath[i]" != "" ];then
 		if [ "${BasiPath[i]/\%*/}" == "local" ];then
-			echo "Transferring local file ${BasiLoc[i]}"
+			echo -e "Transferring ${lightblue}local${nocolor} file ${BasiLoc[i]}"
 			mkdir -p "${BasiLoc[i]%/*}"
 			cp -Rf "${BasiPath[i]/*%/}" "${BasiLoc[i]}" 
 		elif [ "${BasiPath[i]/\%*/}" == "remote" ];then
-			echo "Transferring remote file ${BasiLoc[i]}"
+			echo -e "Transferring ${lightblue}remote${nocolor} file ${BasiLoc[i]}"
 			mkdir -p "${BasiLoc[i]%/*}"
 			if [ "$cont" == "true" ];then
 				if [ "$dlbar" == "true" ];then
 					curl -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+					echo -en "\n"
 				else
 					curl -s -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
 				fi
 			else
 				if [ "$dlbar" == "true" ];then
 					curl -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
+					echo -en "\n"
 				else
 					curl -s -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
 				fi
