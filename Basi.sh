@@ -35,6 +35,7 @@ config=""
 dlbar="true"
 cont="true"
 
+
 # Handle input
 if [ "$@" != "" ];then	
 	for i in "$@";do					
@@ -77,6 +78,7 @@ else
 	LaunchMode="Standalone"
 fi
 
+
 # Read config
 if [ "$config" != "" ];then
 	if [ -f "$config" ];then
@@ -96,6 +98,7 @@ elif [ "$caller" == "Standalone" ];then
 	fi
 fi
 
+
 # Auth vars
 if [ "${#BasiPath[@]}" != "0" ] && [ "${#BasiLoc[@]}" != "0" ];then		
 	if [ "${#BasiPath[@]}" == "${#BasiLoc[@]}" ];then
@@ -109,7 +112,7 @@ else
 	exitw "5" "Critical variable missing. Aborting"
 fi
 
-
+# Transfer files
 for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 	if [ "BasiPath[i]" != "" ];then
 		if [ "${BasiPath[i]/\%*/}" == "local" ];then
@@ -141,6 +144,7 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 			echo "Performing operations on file ${BasiLoc[i]%/*}"
 			# Note this var. It can be useful for FileAction
 			BasiActiveFile="${BasiPath[i]/*%/}" 
+			BasiActiveFileDir="${BasiActiveFile%/*}"
 			# $0 is already formatted('\','[:space:]$') so we just need to cut out the filename.
 			BasiDir="${0%/*}"
 			eval "${BasiFileAction[i]}"
