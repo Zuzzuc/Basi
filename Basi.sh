@@ -37,7 +37,7 @@ cont="true"
 
 
 # Handle input
-if [ "$@" != "" ];then	
+if [ "$*" != "" ];then	
 	for i in "$@";do					
 		case "$i" in		
 		"$0")
@@ -61,10 +61,10 @@ if [ "$@" != "" ];then
    				exitw "3" "Config file does not end with cfg."
    			fi
    			;;
-   		-=nodlb|--no_download_bar)
+   		-nodlb|--no_download_bar)
    				dlbar="false"
    			;;
-   		-=no_cont|--no_continue)
+   		-no_cont|--no_continue)
    				cont="false"
    			;;
 		esac
@@ -82,19 +82,17 @@ fi
 # Read config
 if [ "$config" != "" ];then
 	if [ -f "$config" ];then
-			echo "Read config from $config"
-			source "$config"
-		else
-			exitw "4" "Config file not found."
-		fi
+		echo "Read config from $config"
+		source "$config"
+	else
+		exitw "4" "Config file not found."
 	fi
-elif [ "$caller" == "Standalone" ];then
+elif [ "$LaunchMode" == "Standalone" ];then
 	if [ -f "${0%/*}/Basi.cfg" ];then
-			echo "Will source default config file."
-			source "${0%/*}/Basi.cfg"
-		else
-			exitw "8" "No config file found."
-		fi
+		echo "Will source default config file."
+		source "${0%/*}/Basi.cfg"
+	else
+		exitw "8" "No config file found."
 	fi
 fi
 
