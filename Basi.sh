@@ -62,15 +62,7 @@ config=""
 if [ "$1" != "" ];then
 	# Set input vars.
 	
-	for i in "$@";do
-		# Loop thu all inout, and then do a case? or many if.
-		
-		# Do we need to shift here? 
-		# I think no. I walks up by default. Just quit/exit.
-		
-		# Case is 2x as fast as if... so... well... 
-		# Use case. U need to fix minify tho.
-			
+	for i in "$@";do					
 		case "$i" in
 			# Check args and set vars
 		
@@ -83,7 +75,7 @@ if [ "$1" != "" ];then
     		# Below we do the equivalent of 'config=echo "${i#*=}" | xargs'.
     		# The reason we does it with parameter expansion is that it's roughly 100 times faster than calling xargs. 
    			c="${i#*=}" && c="${c/\\/}" && c="${c/* $/}"
-   			# We need to do this because sadly parameter extension does not support nesting. (eg, ${string:#string-4})
+   			# We need to do this because sadly parameter extension does not support nesting. (eg, ${string:#string-4}) wont work. 
    			cl="${#c}"
    			if [ "${c:cl-4}" == ".cfg" ];then
    				if [ "$c" == "$0" ];then
@@ -101,12 +93,6 @@ if [ "$1" != "" ];then
    			fi
 		esac
 	done
-
-
-else
-	# SET STD VARS
-	# Shall we set it before, so we does not need to set it twice?
-
 fi
 
 ###
