@@ -13,14 +13,7 @@
 # 6: BasiPath and BasiLoc isnt same length.
 # 7: More FileActions than files.
 # 8: Attempted to read default config, but didn't find the file.
-# 9: Unknown argument
-
-
-## TODO
-#
-# Maybe add some sort of log, so we does not need to show all curl output, and instead show a cleaner window.
-#
-##
+# 9: Unknown argument supplied to script
 
 
 exitw(){
@@ -31,6 +24,8 @@ exitw(){
 }
 
 ExitStatus="0"
+
+# Colors
 lightblue='\033[1;34m'
 nocolor='\033[0m'
 
@@ -68,7 +63,7 @@ if [ "$*" != "" ];then
    				dlbar="false"
    			;;
    		-sdlb|--small_download_bar)
-   				dlbar="false"
+   				sdlb="true"
    			;;
    		-nocont|--no_continue)
    			cont="false"
@@ -82,8 +77,6 @@ if [ "$*" != "" ];then
 		esac
 	done
 fi
-
-echo -en "\n\n" 
 
 if [ "$(caller 0)" != "" ];then
 	LaunchMode="Inline"
@@ -128,17 +121,17 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 	if [ "BasiPath[i]" != "" ];then
 		if [ "${BasiPath[i]/\%*/}" == "local" ];then
 			if [ "$color" == "true" ];then
-				echo -e "Transferring ${lightblue}local${nocolor} file ${BasiLoc[i]}"
+				echo -e "Transferring ${lightblue}local${nocolor} file to ${BasiLoc[i]}"
 			else
-				echo "Transferring local file ${BasiLoc[i]}"
+				echo "Transferring local file to ${BasiLoc[i]}"
 			fi
 			mkdir -p "${BasiLoc[i]%/*}"
 			cp -Rf "${BasiPath[i]/*%/}" "${BasiLoc[i]}" 
 		elif [ "${BasiPath[i]/\%*/}" == "remote" ];then
 			if [ "$color" == "true" ];then
-				echo -e "Transferring ${lightblue}remote${nocolor} file ${BasiLoc[i]}"
+				echo -e "Transferring ${lightblue}remote${nocolor} file to ${BasiLoc[i]}"
 			else
-				echo "Transferring remote file ${BasiLoc[i]}"
+				echo "Transferring remote file to ${BasiLoc[i]}"
 			fi
 			mkdir -p "${BasiLoc[i]%/*}"
 			if [ "$cont" == "true" ];then
