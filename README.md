@@ -1,2 +1,2 @@
 # Basi
-More to come soon
+This readme will be updated soon
