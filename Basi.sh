@@ -31,53 +31,25 @@ exitw(){
 
 ExitStatus="0"
 
-
-### Handle Input
-
-
-## What vars should we set?
-# 
-# We should set override of default cfg file.
-#
-# We should set option to display/hide (decide what should be default) progress bar when downloading files.
-#
-#
-#
-#
-#
-
-# Default vars
-
 config=""
 dlbar="true"
 cont="true"
 
-
-
-if [ "$@" != "" ];then
-	# Set input vars.
-	
+# Handle input
+if [ "$@" != "" ];then	
 	for i in "$@";do					
-		case "$i" in
-			# Check args and set vars
-		
+		case "$i" in		
 		"$0")
-			# Should we use continue or ':'?
-			:
-    		# continue
+			#:
+    		continue
     		;;
     	-c=*|--config=*)
-    		# Below we do the equivalent of 'config=echo "${i#*=}" | xargs'.
-    		# The reason we does it with parameter expansion is that it's roughly 100 times faster than calling xargs. 
    			#c="${i#*=}" && c="${c/\\/}" && c="${c/* $/}"
    			c="${i#*=}" && c="${c/\\/}" && c="${c%${c##*[![:space:]]}}"
-   			# We need to do this because sadly parameter extension does not support nesting. (eg, ${string:#string-4}) wont work. 
-   			# JUST REALISED, ${string:${#string}-4} works!
    			if [ "${c:${#c}-4}" == ".cfg" ];then
    				if [ "$c" == "${0/\\/}" ];then
    					exitw "3" "Config file points to this script."
    				else
-   					# Using read instead of 'head -1' because it's a bash builtin.
    					if [ "$(read -r tmpc < "$config";echo $tmpc)" == '#Basi Config File' ];then
    						config="$c"
    					else
@@ -98,9 +70,6 @@ if [ "$@" != "" ];then
 	done
 fi
 
-###
-
-
 
 if [ "$(caller 0)" != "" ];then
 	LaunchMode="Inline"
@@ -108,7 +77,7 @@ else
 	LaunchMode="Standalone"
 fi
 
-
+# Read config
 if [ "$config" != "" ];then
 	if [ -f "$config" ];then
 			echo "Read config from $config"
