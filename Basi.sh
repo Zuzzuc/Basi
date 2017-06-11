@@ -82,15 +82,16 @@ if [ "$1" != "" ];then
     		-c=*|--config=*)
     		# Below we do the equivalent of 'config=echo "${i#*=}" | xargs'.
     		# The reason we does it with parameter expansion is that it's roughly 100 times faster than calling xargs. 
-   			config="${i#*=}" && config="${config/\\/}" && config="${config/* $/}"
+   			c="${i#*=}" && c="${c/\\/}" && c="${c/* $/}"
    			# We need to do this because sadly parameter extension does not support nesting. (eg, ${string:#string-4})
-   			config_length="${#config}"
-   			if [ "${config:config_length-4}" == ".cfg" ];then
-   				if [ "$config" == "$0" ];then
+   			cl="${#c}"
+   			if [ "${c:cl-4}" == ".cfg" ];then
+   				if [ "$c" == "$0" ];then
    					exitw "3" "Config file points to this script."
    				else
+   					# Using read instead of 'head -1' because it's a bash builtin.
    					if [ "$(read -r tmpc < "$config";echo $tmpc)" == '#Basi Config File' ];then
-   						config=""
+   						config="$c"
    					else
    						exitw "3" "Config file missing first line mark"
    					fi
@@ -98,7 +99,7 @@ if [ "$1" != "" ];then
    			else
    				exitw "3" "Config file does not end with cfg."
    			fi
-		easc
+		esac
 	done
 
 
