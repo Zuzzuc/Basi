@@ -41,7 +41,6 @@ if [ "$*" != "" ];then
 	for i in "$@";do					
 		case "$i" in		
 		"$0")
-			#:
     		continue
     		;;
     	-c=*|--config=*)
@@ -61,7 +60,7 @@ if [ "$*" != "" ];then
    				exitw "3" "Config file does not end with cfg."
    			fi
    			;;
-   		-nodlb|--no_download_bar)
+   		-no_dlb|--no_download_bar)
    				dlbar="false"
    			;;
    		-no_cont|--no_continue)
@@ -114,11 +113,11 @@ fi
 for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 	if [ "BasiPath[i]" != "" ];then
 		if [ "${BasiPath[i]/\%*/}" == "local" ];then
-			echo "Transferring local file ${BasiLoc[i]%/*}"
+			echo "Transferring local file ${BasiLoc[i]}"
 			mkdir -p "${BasiLoc[i]%/*}"
 			cp -Rf "${BasiPath[i]/*%/}" "${BasiLoc[i]}" 
 		elif [ "${BasiPath[i]/\%*/}" == "remote" ];then
-			echo "Transferring remote file ${BasiLoc[i]%/*}"
+			echo "Transferring remote file ${BasiLoc[i]}"
 			mkdir -p "${BasiLoc[i]%/*}"
 			if [ "$cont" == "true" ];then
 				if [ "$dlbar" == "true" ];then
