@@ -3,19 +3,6 @@
 # Author Zuzzuc https://github.com/Zuzzuc
 
 
-### Error codes
-#
-# 1: Generic error(By subprocess)
-# 2: Unknown location to retrieve file from. It must be either local or remote.
-# 3: Not valid config file
-# 4: Config file not found.
-# 5: BasiPath or BasiLoc is missing or empty. 
-# 6: BasiPath and BasiLoc isnt same length.
-# 7: More FileActions than files.
-# 8: Attempted to read default config, but didn't find the file.
-# 9: Unknown argument supplied to script
-
-
 exitw(){
 	# Exits and echos message.
 	# Input is $1 and $2, where $1 is the exit code (0-256) and $2 is the message to display.
