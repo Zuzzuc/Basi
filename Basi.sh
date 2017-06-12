@@ -3,6 +3,9 @@
 # Author Zuzzuc https://github.com/Zuzzuc
 
 
+## TODO
+# l.42: supress error.
+
 exitw(){
 	# Exits and echos message.
 	# Input is $1 and $2, where $1 is the exit code (0-256) and $2 is the message to display.
@@ -36,9 +39,10 @@ if [ "$*" != "" ];then
    				if [ "$c" == "${0/\\/}" ];then
    					exitw "3" "Config file points to this script."
    				else
-   					if [ "$(read -r tmpc < "$config";echo "$tmpc")" == '#Basi Config File' ];then
+   					if [ "$(read -r tmpc < "$c";echo "$tmpc")" == '#Basi Config File' ];then
    						config="$c"
    					else
+   						echo its .$tmpc.
    						exitw "3" "Config file missing first line mark"
    					fi
    				fi
@@ -124,7 +128,7 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 			if [ "$cont" == "true" ];then
 				if [ "$dlbar" == "true" ];then
 					if [ "$sdlb" == "true" ];then
-						curl -# -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
+						curl -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}" -#
 					else
 						curl -o "${BasiLoc[i]}" -C - "${BasiPath[i]/*%/}"
 					fi
@@ -135,7 +139,7 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 			else
 				if [ "$dlbar" == "true" ];then
 					if [ "$sdlb" == "true" ];then
-						curl -# -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
+						curl -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}" -#
 					else
 						curl -o "${BasiLoc[i]}" "${BasiPath[i]/*%/}"
 					fi
@@ -149,12 +153,10 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 		fi
 		
 		if [ "${BasiFileAction[i]}" != "" ];then
-			echo "Performing operations on file ${BasiLoc[i]%/*}"
-			# Note this var. It can be useful for FileAction
+			echo "Performing operations on file ${BasiLoc[i]##*/}"
+			BasiDir="${0%/*}"
 			BasiActiveFile="${BasiLoc[i]/*%/}" 
 			BasiActiveFileDir="${BasiActiveFile%/*}"
-			# $0 is already formatted('\','[:space:]$') so we just need to cut out the filename.
-			BasiDir="${0%/*}"
 			eval "${BasiFileAction[i]}"
 		fi
 	else
