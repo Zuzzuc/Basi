@@ -4,7 +4,7 @@
 
 
 ## TODO
-# l.42: supress error.
+# l.42: supress error. #Done
 
 exitw(){
 	# Exits and echos message.
@@ -39,7 +39,7 @@ if [ "$*" != "" ];then
    				if [ "$c" == "${0/\\/}" ];then
    					exitw "3" "Config file points to this script."
    				else
-   					if [ "$(read -r tmpc < "$c";echo "$tmpc")" == '#Basi Config File' ];then
+   					if [ "$(read -r tmpc 2>/dev/null < "$c" 2>/dev/null ;echo "$tmpc")" == '#Basi Config File' ];then
    						config="$c"
    					else
    						echo its .$tmpc.
