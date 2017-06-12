@@ -32,7 +32,7 @@ nocolor='\033[0m'
 config=""
 dlbar="true"
 cont="true"
-sdlb="false" # NOT IMPLEMENTED
+sdlb="false"
 color="true"
 
 
@@ -162,10 +162,9 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 		fi
 		
 		if [ "${BasiFileAction[i]}" != "" ];then
-			# Vars that gets created here: BasiActiveFile, BasiDir, what else?
 			echo "Performing operations on file ${BasiLoc[i]%/*}"
 			# Note this var. It can be useful for FileAction
-			BasiActiveFile="${BasiPath[i]/*%/}" 
+			BasiActiveFile="${BasiLoc[i]/*%/}" 
 			BasiActiveFileDir="${BasiActiveFile%/*}"
 			# $0 is already formatted('\','[:space:]$') so we just need to cut out the filename.
 			BasiDir="${0%/*}"
