@@ -3,9 +3,6 @@
 # Author Zuzzuc https://github.com/Zuzzuc
 
 
-## TODO
-# l.42: supress error. #Done
-
 exitw(){
 	# Exits and echos message.
 	# Input is $1 and $2, where $1 is the exit code (0-256) and $2 is the message to display.
