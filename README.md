@@ -1,6 +1,8 @@
 # Basi
 This readme will be updated soon, but in short this is a script that makes writing installers easier.
 
+Basi is a script used to make installers easier. It can either be used as a standalone script or a an inline function. 
+
 ## Usage
 
 ## Arguments
