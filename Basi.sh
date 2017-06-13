@@ -23,7 +23,6 @@ cont="true"
 sdlb="false"
 color="true"
 
-
 # Handle input
 if [ "$*" != "" ];then	
 	for i in "$@";do					
@@ -73,7 +72,6 @@ else
 	LaunchMode="Standalone"
 fi
 
-
 # Read config
 if [ "$config" != "" ];then
 	if [ -f "$config" ];then
@@ -90,7 +88,6 @@ elif [ "$LaunchMode" == "Standalone" ];then
 		exitw "8" "No config file found."
 	fi
 fi
-
 
 # Auth vars
 if [ "${#BasiPath[@]}" != "0" ] && [ "${#BasiLoc[@]}" != "0" ];then		
