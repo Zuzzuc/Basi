@@ -39,7 +39,6 @@ if [ "$*" != "" ];then
    					if [ "$(read -r tmpc 2>/dev/null < "$c" 2>/dev/null ;echo "$tmpc")" == '#Basi Config File' ];then
    						config="$c"
    					else
-   						echo its .$tmpc.
    						exitw "3" "Config file missing first line mark"
    					fi
    				fi
