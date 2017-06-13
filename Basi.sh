@@ -16,6 +16,7 @@ ExitStatus="0"
 lightblue='\033[1;34m'
 nocolor='\033[0m'
 
+# Default vars
 config=""
 dlbar="true"
 cont="true"
