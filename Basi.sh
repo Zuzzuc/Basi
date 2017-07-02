@@ -103,7 +103,7 @@ fi
 
 # Transfer files
 for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
-	if [ "BasiPath[i]" != "" ];then
+	if [ "$BasiPath[i]" != "" ];then
 		if [ "${BasiPath[i]/\%*/}" == "local" ];then
 			if [ "$color" == "true" ];then
 				echo -e "Transferring ${lightblue}local${nocolor} file to ${BasiLoc[i]}"
