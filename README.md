@@ -53,7 +53,6 @@ Example of BasiPath: `BasiPath[0]="remote%https://www.example.com/somefile.txt"`
 Example of BasiLoc: `BasiLoc[0]="/tmp/filedestination.txt"`<br>
 <br>
 <br>
-<br>
 The third array that can be utilized is named 'BasiFileAction'.<br>
 Once each file has been downloaded the content of BasiFileAction will be executed. This allows for, as an example, unarchiving archives that just has been downloaded. <br> 
 When BasiFileAction is being proccessed some variables that might be useful are set. These are 'BasiDir', which is the directory Basi is stored in(useful if the installer is located on a portable device), 'BasiActiveFile', which is the local path of the latest file downloaded (equals to `${BasiLoc[i]*%/}`) and 'BasiActiveFileDir' which is the directory of the file latest downloaded.
