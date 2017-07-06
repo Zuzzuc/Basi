@@ -49,7 +49,7 @@ The formating required on BasiPath is to tell Basi where it can find the files. 
 <br><br>
 Example of BasiPath: `BasiPath[0]="local%/tmp/somefile.txt"`<br>
 Example of BasiPath: `BasiPath[0]="remote%https://www.example.com/somefile.txt"`<br>
-<br><br>
+<br>
 Example of BasiLoc: `BasiLoc[0]="/tmp/filedestination.txt"`<br>
 <br>
 <br>
