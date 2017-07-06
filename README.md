@@ -28,6 +28,12 @@ Example: `/Basi.sh -c="config.cfg" -nodlb`
 Example: `/Basi.sh -c="config.cfg" -sdlb`
 <br><br><br>
 
+### No continue
+#### -nocont or --no-continue
+<br>This option prevents Basi to continue downloading incomplete files.<br><br>
+Example: `/Basi.sh -c="config.cfg" -nocont`
+<br><br><br>
+
 ### Disable color scheme
 #### -nocol or --no-color
 <br>Disables printing color encoded text.<br><br>
