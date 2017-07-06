@@ -2,7 +2,7 @@
 # License: The MIT License (MIT)
 # Author Zuzzuc https://github.com/Zuzzuc
 
-
+# TODO: Apply rules of inline support.sh
 exitw(){
 	# Exits and echos message.
 	# Input is $1 and $2, where $1 is the exit code (0-256) and $2 is the message to display.
@@ -46,16 +46,16 @@ if [ "$*" != "" ];then
    				exitw "3" "Config file does not end with cfg."
    			fi
    			;;
-   		-nodlb|--no_download_bar)
+   		-nodlb|--no-download-bar)
    				dlbar="false"
    			;;
-   		-sdlb|--small_download_bar)
+   		-sdlb|--small-download-bar)
    				sdlb="true"
    			;;
-   		-nocont|--no_continue)
+   		-nocont|--no-continue)
    			cont="false"
    			;;
-   		-nocol|--no_color)
+   		-nocol|--no-color)
    			color="false"
    			;;
    		*)
