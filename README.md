@@ -22,12 +22,6 @@ Example: `/Basi.sh -c="config.cfg"`
 Example: `/Basi.sh -c="config.cfg" -nodlb`
 <br><br><br>
 
-### Disable download bar
-#### -nodlb or --no-download-bar
-<br>This option disables the download bar when reteriving files from remote server.<br><br>
-Example: `/Basi.sh -c="config.cfg" -nodlb`
-<br><br><br>
-
 ### Small download bar
 #### -sdlb or --small-download-bar
 <br>This option replaces the default download bar with a smaller one.<br><br>
