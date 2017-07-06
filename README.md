@@ -11,7 +11,7 @@ At the very least, Basi requires two variables to be able to run. These can eith
 ### Config file
 #### -c or --config
 #### Requires a parameter
-#### This option is REQUIRED if the script is being called as a standalone script.(Unless the parent procces exported the require variables)
+#### This option is REQUIRED if the script is being called as a standalone script.(Unless the parent process exported the require variables)
 <br>This option chooses what file to read configuration from.<br><br>
 Example: `/Basi.sh -c="config.cfg"`
 <br><br><br>
