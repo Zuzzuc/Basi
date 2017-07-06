@@ -45,7 +45,7 @@ Example: `/Basi.sh -c="config.cfg" -nocol`
 ### General rules
 Basi requires two arrays to be set. These are 'BasiPath' and 'BasiLoc', which respectivily decides what path to reterive the file from and where to store it locally. There is however one more array that can be utalised, which is named 'BasiFileAction', but more on that later.<br><br>
 BasiPath requires some formatting before being submitted to Basi, while BasiLoc just needs to be a absolute filepath.<br>
-The formating required on BasiPath is to tell Basi where it can find the files. The general syntax for BasiPath is 'mode%path', where mode is 'local' or 'remote' and path is a corresponding path where the file can be found.
+The formating required on BasiPath is to tell Basi where it can find the files. The general syntax for BasiPath is 'mode%path', where mode is 'local' or 'remote' and path is a corresponding path where the file can be found. The length of both BasiPath and BasiLoc must be equal.
 <br><br>
 Example of BasiPath: `BasiPath[0]="local%/tmp/somefile.txt"`<br>
 Example of BasiPath: `BasiPath[0]="remote%https://www.example.com/somefile.txt"`<br>
@@ -54,13 +54,19 @@ Example of BasiLoc: `BasiLoc[0]="/tmp/filedestination.txt"`<br>
 <br>
 <br>
 The third array that can be utilized is named 'BasiFileAction'.<br>
-This variable will allow you to post proccess the downloaded file. Once the transfer has finished, the content of BasiFileAction will be executed. A good example of where using this might be a good idea is when dealing with compressed archives. <br><br> 
+This variable will allow you to post proccess the downloaded file. Once the transfer has finished, the content of BasiFileAction will be executed. A good example of where using this might be a good idea is when dealing with compressed archives. BasiFileAction length must not exceed BasiPath and BasiLoc's length <br><br> 
 When BasiFileAction is being proccessed some variables that might be useful are set. These are 'BasiDir', which is the directory Basi is stored in(useful if the installer is located on a portable device), 'BasiActiveFile', which is the local path of the latest file downloaded (equals to `${BasiLoc[i]*%/}`) and 'BasiActiveFileDir' which is the directory of the file latest downloaded.
 
 ### Inline
 
-### Config file
+When calling Basi as a inline function(preferrably by b64gz) make sure that both BasiPath and BasiLoc are declared and are corecctly formatted. 
 
+### Config file
+Basi config file has some rules. 
+
+1. The first line must equal "#Basi Config File"
+2. The filename must have the file extension .cfg
+3. Config must consist of at the very least a correctly formatted BasiPath as well as a correctly formatted BasiLoc.
 
 ## Exit codes
 0: Everything went well.<br>
