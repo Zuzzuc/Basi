@@ -1,11 +1,9 @@
 # Basi
-This readme will be updated soon, but in short this is a script that makes writing installers easier.
-
-Basi is a script used to make installers easier. It can either be used as a standalone script or a an inline function. 
+Basi is a script used to make writing installers simpler. It can either be used as a standalone script or a an inline function. All files to be proccessed should be located in their associated arrays. 
 
 ## Usage
 
-At the very least, Basi requires two variables to be able to run. These can either be set with a config file or, if Basi is being called as a inline function, can be declared in the calling script. These variables are 'BasiPath' and 'BasiLoc'. For formatting, see "Config setup" below.
+At the very least, Basi requires two arrays to be declared in order to be able to run. These can either be set with a config file or, if Basi is being called as a inline function, can be declared in the calling script. These variables are 'BasiPath' and 'BasiLoc'. For formatting, see "Config setup" below.
 
 ## Arguments
 ### Config file
