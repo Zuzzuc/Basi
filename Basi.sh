@@ -30,7 +30,7 @@ if [ "$*" != "" ];then
 		"$0")
     		continue
     		;;
-    	-c=*|--config=*)
+		-c=*|--config=*)
    			c="${i#*=}" && c="${c/\\/}" && c="${c%${c##*[![:space:]]}}"
    			if [ "${c:${#c}-4}" == ".cfg" ];then
    				if [ "$c" == "${0/\\/}" ];then
