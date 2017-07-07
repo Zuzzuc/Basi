@@ -41,6 +41,7 @@ Example: `/Basi.sh -c="config.cfg" -nocol`
 
 ## Config setup
 ### General rules
+
 Basi requires two arrays to be set. These are 'BasiPath' and 'BasiLoc', which respectivily decides what path to reterive the file from and where to store it locally. There is however one more array that can be utalised, which is named 'BasiFileAction', but more on that later.<br><br>
 BasiPath requires some formatting before being submitted to Basi, while BasiLoc just needs to be a absolute filepath.<br>
 The formating required on BasiPath is to tell Basi where it can find the files. The general syntax for BasiPath is 'mode%path', where mode is 'local' or 'remote' and path is a corresponding path where the file can be found. The length of both BasiPath and BasiLoc must be equal.
@@ -60,6 +61,7 @@ When BasiFileAction is being proccessed some variables that might be useful are 
 When calling Basi as a inline function(preferrably by b64gz) make sure that both BasiPath and BasiLoc are declared and are corecctly formatted. 
 
 ### Config file
+
 Basi config file has some rules. 
 
 1. The first line must equal "#Basi Config File"
