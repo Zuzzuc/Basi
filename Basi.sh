@@ -2,15 +2,11 @@
 # License: The MIT License (MIT)
 # Author Zuzzuc https://github.com/Zuzzuc
 
-# TODO: Apply rules of inline support.sh
-exitw(){
-	# Exits and echos message.
-	# Input is $1 and $2, where $1 is the exit code (0-256) and $2 is the message to display.
-	echo "$2"
-	exit $1
-}
-
-ExitStatus="0"
+if [ "$(caller 0)" != "" ];then
+	exit_mode="return"
+else
+	exit_mode="exit"
+fi
 
 # Colors
 lightblue='\033[1;34m'
@@ -23,6 +19,44 @@ cont="true"
 sdlb="false"
 color="true"
 
+catch_err(){
+	# Input is $1 and optionally $2, where $1 is the error code description to display and $2 can be specified to override the default error message.
+	if [ -z $2 ];then
+		case "$1" in
+    		1)
+   				echo "Generic error encountered."
+   				;;
+   			2)
+   				echo "Unknown location to retrieve file from. Encountered format was '$3'. It must be either 'local' or 'remote'."	
+   				;;
+   			3)
+   				echo "Not valid config file."
+   				;;
+   			4)
+   				echo "The config file '$3' was not found."
+   				;;
+   			5)
+   				echo "BasiPath or BasiLoc is missing or empty."
+   				;;
+   			6)
+   				echo "BasiPath and BasiLoc isnt same length."
+   				;;
+   			7)
+   				echo "More FileActions than files."
+   				;;
+   			8)
+   				echo "Attempted to read default config, but didn't find the file."
+   				;;
+   			9)
+   				echo "Unknown argument supplied to script. Failing argument is '$3'"
+   				;;
+   		esac
+   	else
+   		echo "$2"
+   	fi
+   	error_code=$1
+}
+
 # Handle input
 if [ "$*" != "" ];then	
 	for i in "$@";do					
@@ -34,16 +68,16 @@ if [ "$*" != "" ];then
    			c="${i#*=}" && c="${c/\\/}" && c="${c%${c##*[![:space:]]}}"
    			if [ "${c:${#c}-4}" == ".cfg" ];then
    				if [ "$c" == "${0/\\/}" ];then
-   					exitw "3" "Config file points to this script."
+   					catch_err "3" "Config file points to this script" && $exit_mode $error_code
    				else
    					if [ "$(read -r tmpc 2>/dev/null < "$c" 2>/dev/null ;echo "$tmpc")" == '#Basi Config File' ];then
    						config="$c"
    					else
-   						exitw "3" "Config file missing first line mark"
+   						catch_err "3" "Config file is missing first line mark" && $exit_mode $error_code
    					fi
    				fi
    			else
-   				exitw "3" "Config file does not end with cfg."
+   				catch_err "3" "Config file does not end with .cfg" && $exit_mode $error_code
    			fi
    			;;
    		-nodlb|--no-download-bar)
@@ -59,16 +93,10 @@ if [ "$*" != "" ];then
    			color="false"
    			;;
    		*)
-   			exitw "9" "Unknown argument '$i'"
+   			catch_err "9" "" "$i" && $exit_mode $error_code
    			;;
 		esac
 	done
-fi
-
-if [ "$(caller 0)" != "" ];then
-	LaunchMode="Inline"
-else
-	LaunchMode="Standalone"
 fi
 
 # Read config
@@ -77,14 +105,14 @@ if [ "$config" != "" ];then
 		echo -e "\nReading config from $config\n"
 		source "$config"
 	else
-		exitw "4" "Config file not found."
+		catch_err "4" "" "$config" && $exit_mode $error_code
 	fi
-elif [ "$LaunchMode" == "Standalone" ];then
+elif [ "$exit_mode" == "Standalone" ];then
 	if [ -f "${0%/*}/Basi.cfg" ];then
 		echo -e "\nReading config from default file\n"
 		source "${0%/*}/Basi.cfg"
 	else
-		exitw "8" "No config file found."
+		catch_err "8" && $exit_mode $error_code
 	fi
 fi
 
@@ -92,13 +120,13 @@ fi
 if [ "${#BasiPath[@]}" != "0" ] && [ "${#BasiLoc[@]}" != "0" ];then		
 	if [ "${#BasiPath[@]}" == "${#BasiLoc[@]}" ];then
 		if [ "${#BasiLoc[@]}" -lt "${#BasiFileAction[@]}" ];then
-			exitw "7" "Too many FileActions"
+			catch_err "7" && $exit_mode $error_code
 		fi	
 	else
-		exitw "6" "File source/destination is not correctly formatted."
+		catch_err "6" && $exit_mode $error_code
 	fi
 else
-	exitw "5" "Critical variable missing. Aborting"
+	catch_err "5" && $exit_mode $error_code
 fi
 
 # Transfer files
@@ -143,7 +171,7 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 				fi
 			fi
 		else
-			exitw "2" "Unknown location to retrive file from. Encountered format was '${BasiPath[i]/\%*/}'"
+			catch_err "2" "" "${BasiPath[i]/\%*/}" && $exit_mode $error_code
 		fi
 		
 		if [ "${BasiFileAction[i]}" != "" ];then
@@ -157,9 +185,3 @@ for ((i=0;i<=$((${#BasiPath[@]}-1));i++));do
 		echo "Empty path found at slot $i. Skipping"
 	fi
 done
-
-if [ "$LaunchMode" == "Standalone" ];then
-	exit $ExitStatus
-elif [ "$LaunchMode" == "Inline"  ];then
-	return $ExitStatus
-fi
