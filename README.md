@@ -58,7 +58,7 @@ When BasiFileAction is being proccessed some variables that might be useful are 
 
 ### Inline
 
-When calling Basi as a inline function(preferrably by b64gz) make sure that both BasiPath and BasiLoc are declared and are corecctly formatted. 
+When calling Basi as a inline function(preferrably by b64gz) make sure that both BasiPath and BasiLoc are declared and are correctly formatted. 
 
 ### Config file
 
