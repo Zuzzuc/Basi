@@ -1,5 +1,5 @@
 # Basi
-Basi is a script used to make writing installers simpler. It can either be used as a standalone script or a an inline function. All files to be proccessed should be located in their associated arrays. 
+Basi is a script used to make writing installers simpler. It can either be used as a standalone script or as an inline function. All files to be proccessed should be located in their associated arrays. 
 
 ## Usage
 
